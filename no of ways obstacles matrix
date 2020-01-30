@@ -1,0 +1,65 @@
+// no of unique path with obstacles in a matrix from source to destination by pankaj
+//n*m
+#include <bits/stdc++.h>
+using namespace std;
+typedef unsigned long long LL;
+int n,m;
+string ar[100005];
+LL no_of_ways()
+{
+    bool flag=0;
+    LL dp[n][m];
+    if(ar[0][0]=='1'||ar[n-1][m-1]=='1')
+        return INT_MAX;
+    dp[0][0]=0;
+    for(int i=1;i<m;i++)
+    {
+        if(flag||ar[0][i]=='1')
+        {
+            dp[0][i]=INT_MAX;
+            flag=1;
+        }
+        else
+            dp[0][i]=1;
+    }
+    flag=0;
+    for(int i=1;i<m;i++)
+    {
+        if(flag||ar[i][0]=='1')
+        {
+            dp[i][0]=INT_MAX;
+            flag=1;
+        }
+        else
+            dp[i][0]=1;
+    }
+    for(int i=1;i<n;i++)
+    {
+        for(int j=1;j<m;j++)
+        {
+            if(ar[i][j]=='1')
+                dp[i][j]=INT_MAX;
+            else if(dp[i-1][j]==INT_MAX||dp[i][j-1]==INT_MAX)
+                dp[i][j]=min(dp[i-1][j],dp[i][j-1]);
+            else
+                dp[i][j]=dp[i-1][j]+dp[i][j-1];
+            //cout<<dp[i][j]<<" ";
+        }
+        //cout<<endl;
+    }
+    return dp[n-1][m-1];
+}
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    int t=1;
+	cin>>t;
+	while(t--)
+	{
+	    cin>>n>>m;
+	    for(int i=0;i<n;i++)
+	        cin>>ar[i];
+	    cout<<no_of_ways()<<endl;
+	}
+	return 0;
+}
