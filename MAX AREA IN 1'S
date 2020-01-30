@@ -1,0 +1,70 @@
+#include <bits/stdc++.h> 
+using namespace std; 
+typedef unsigned long long LL;
+bool arr[1001][1001];
+LL ar[1001];
+int r,c;
+LL histogram()
+{
+    int i=0;
+    stack<LL> s;
+    LL area=0;
+    while(i<c)
+    {
+        if(s.empty()||ar[s.top()]<=ar[i])
+        {
+            s.push(i);
+        }
+        else
+        {
+            while(!s.empty() && ar[s.top()]>ar[i])
+            {
+                int pt=s.top();
+                s.pop();
+                area=max(area,(s.empty() ? i:i-s.top()-1)*ar[pt]);
+            }
+            s.push(i);
+        }
+        i++;
+    }
+    while(!s.empty())
+    {
+        int pt=s.top();
+        s.pop();
+        area=max(area,(s.empty() ? i:i-s.top()-1)*ar[pt]);
+    }
+    return area;   
+    }
+
+void fun()  
+{
+    LL maxi=0;
+    for(int i=0; i<r;i++)  
+    {  
+        for(int j=0;j<c;j++)  
+        {  
+            if(arr[i][j]==1)  
+                ar[j]++;  
+            else
+                ar[j] = 0;  
+            //cout<<ar[j]<<" ";
+        }
+        //cout<<endl;
+        //cout<<maxi<<endl;
+        if(i==r-1)
+            maxi=max(maxi,histogram());
+    }  
+    cout<<maxi<<endl;
+}  
+int main()
+{
+    cin>>r>>c;
+    for(int i=0;i<r;i++)
+    {
+        for(int j=0;j<c;j++)
+            cin>>arr[i][j];
+    }
+    fun();
+    return 0;
+}
+
