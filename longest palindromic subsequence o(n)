@@ -1,14 +1,13 @@
 class Solution {
 public:
     int longestPalindromeSubseq(string s) {
-             int n = s.size();
-        // shortcuts
+        int n=s.size();
         if (n == 1)
             return 1;
         if (n == 2)
             return s[0] == s[1] ? 2 : 1;
         // total palindromic
-        int l = 0, r = s.size() - 1;
+        int l = 0, r = n - 1;
         while (l <= r){
             if (s[l] != s[r])
                 break;
@@ -16,25 +15,28 @@ public:
         }
         if (l > r)
             return n;
-        
-        // dp O(n) solution
-        vector<int> dp(n, 0);
-        for (int i = n-2; i >= 0; i--) // i is the starting index of the substr
+        int dp[n][n],maxi=1;
+        for(int i=0;i<n;i++)
+            dp[i][i]=1;
+        for(int i=0;i<n-1;i++)
         {
-            int hold = 0;                   // hold = 0 since empty string has len 0
-            dp[i] = 1;                      // i to i is palin with len 1
-            for (int j = i+1; j < n; j++) // j is the ending index of the substr, i != j
-            {  
-                int temp = dp[j];
-                // main dp statement see last submitted solution though at solution is saved with len and start, the idea is the same, dp using start end will require looping reversely from end to start
-                if (s[i] == s[j])
-                    dp[j] = 2 + hold; // hold = dp[i+1][j-1];
+            if(s[i]==s[i+1])
+                dp[i][i+1]=2;
+            else
+                dp[i][i+1]=1;
+            maxi=max(dp[i][1+i],maxi);
+        }
+        for(int i=2;i<n;i++)
+        {
+            for(int j=0;j+i<n;j++)
+            {
+                if(s[j]==s[i+j])
+                    dp[j][j+i]=2+dp[j+1][i+j-1];
                 else
-                    dp[j] = max(dp[j], dp[j-1]); // max(dp[i+1][j], dp[i][j-1]);
-                hold = temp;
+                    dp[j][j+i]=max(dp[j][i+j-1],dp[j+1][i+j]);
+                maxi=max(dp[j][j+i],maxi);
             }
         }
-        return dp[n-1];
-   
+        return maxi;
     }
 };
