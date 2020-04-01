@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define fast int x = []() { std::ios::sync_with_stdio(false); cin.tie(NULL); return 0; }();
+#define ll long long
+#define LL unsigned ll
+#define pb push_back
+#define pi pair<int,int>
+long double PI =3.14159265358979323846;
+ 
+const ll M=1e9+7;
+const ll inf=1e18;
+const ll ms=2e5+1;
+fast;
+void fun(vector<int> interval)
+{
+    int n=interval.size();
+    int k=(n+1)/2;
+    int dp[k+1][n];
+    for(int i=0;i<n;i++)
+        dp[0][i]=0;
+    for(int i=1;i<=k;i++)
+    {
+        dp[i][0]=0;
+        for(int j=1;j<n;j++)
+        {
+            dp[i][j]=dp[i][j-1];
+           for(int k=0;k<j;k++)
+           {
+               dp[i][j]=max(dp[i][j],dp[i-1][k]+interval[j]-interval[k]);
+           }
+        }
+    }
+    for(int i=0;i<=k;i++)
+    {
+        for(int j=0;j<n;j++)
+            cout<<dp[i][j]<<" ";
+        cout<<endl;
+    }
+    cout<<dp[k][n-1];
+}
+or
+void fun(vector<int>& interval) {
+        int n=interval.size();
+        if(n==0)
+            return 0;
+        int k=2;
+        int dp[k+1][n];
+        for(int i=0;i<n;i++)
+            dp[0][i]=0;
+        for(int i=1;i<=k;i++)
+        {
+            dp[i][0]=0;
+            int diff=INT_MIN;
+            for(int j=1;j<n;j++)
+            {
+                diff=max(diff,dp[i-1][j-1]-interval[j-1]);
+                dp[i][j]=max(diff+interval[j],dp[i][j-1]);
+            }
+        }
+        cout dp[k][n-1];
+    }
+int main()
+{
+    vector<int> vc={2,5,7,1,4,3,1,3};
+    fun(vc);
+    return 0;
+}
